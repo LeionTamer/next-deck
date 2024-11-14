@@ -1,5 +1,9 @@
-import { Button } from '@/components/ui/button'
+import BaseMap from '@/components/map/basemap'
 
 export default async function TestPage() {
-  return <Button>I was tested</Button>
+  return (
+    <>
+      <BaseMap />
+    </>
+  )
 }

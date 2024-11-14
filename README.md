@@ -75,6 +75,11 @@ Changes in the `app/layout.tsx`
 
 <br />
 
+```bash
+npm install deck.gl --save
+npm install react-map-gl maplibre-gl
+```
+
 ## Optional DX libraries
 
 ### prettier-eslint package and configuration
