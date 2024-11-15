@@ -75,10 +75,48 @@ Changes in the `app/layout.tsx`
 
 <br />
 
+Install the deck-gl and react-map-gl and maplibre to use DeckGL for NextJS
+
 ```bash
 npm install deck.gl --save
 npm install react-map-gl maplibre-gl
 ```
+
+Install node-postgres to use postgres
+
+```bash
+npm install pg
+npm i --save-dev @types/pg
+```
+
+Create a database connection string and use it in the `DATABASE_URL` environment
+
+```
+DATABASE_URL=postgres://{user}:{password}@{hostname}:{port}/{database-name}
+```
+
+Setup a Postgres pool connection
+
+<details>
+<summary>
+Create a `lib/postgres.ts` file
+</summary>
+
+```typescript
+import { Pool } from 'pg'
+
+let pgPool
+
+if (!pgPool) {
+  pgPool = new Pool({
+    connectionString: process.env.DATABASE_URL,
+  })
+}
+
+export default pgPool as Pool
+```
+
+</details>
 
 ## Optional DX libraries
 
