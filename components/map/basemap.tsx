@@ -17,13 +17,15 @@ export default function BaseMap({
   height = '40rem',
   width = '100vw',
   zoom = 12,
+  latitude = -33.865143,
+  longitude = 151.2099,
   ...props
 }: IBaseMapProps) {
   return (
     <DeckGL
       initialViewState={{
-        longitude: 151.2099,
-        latitude: -33.865143,
+        longitude: longitude,
+        latitude: latitude,
         zoom,
       }}
       controller
