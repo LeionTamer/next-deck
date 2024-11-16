@@ -4,7 +4,7 @@ import { getNeighborhood } from '@/db/nyc/neighborhood'
 export default async function TestPage() {
   const neighborhood = await getNeighborhood()
 
-  console.table(neighborhood)
+  // console.table(neighborhood)
 
   return (
     <>
