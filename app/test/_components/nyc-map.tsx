@@ -3,6 +3,7 @@
 import BaseMap from '@/components/map/basemap'
 import { CrimeGeoJsonType } from '@/db/nyc/neighborhood'
 import { GeoJsonLayer } from 'deck.gl'
+import { Feature, Geometry } from 'geojson'
 
 interface INYCMap {
   crimes: CrimeGeoJsonType[]
@@ -17,7 +18,16 @@ export default function NYCMap({ crimes }: INYCMap) {
     filled: true,
     pointType: 'circle+text',
     pickable: true,
-    getFillColor: (f) => [160, 160, 180, f.properties.victims],
+    getFillColor: (f) => [100, 50, 50, f.properties.victims],
+    getText: (
+      f: Feature<
+        Geometry,
+        {
+          name: string
+          victims: number
+        }
+      >
+    ) => f.properties.name,
 
     getLineWidth: 20,
     getPointRadius: 4,
@@ -25,7 +35,14 @@ export default function NYCMap({ crimes }: INYCMap) {
   })
   return (
     <>
-      <BaseMap latitude={40.73061} longitude={-73.935242} layers={[geoLayer]} />
+      <BaseMap
+        latitude={40.73061}
+        longitude={-73.935242}
+        layers={[geoLayer]}
+        getTooltip={({ object }) =>
+          object && `${object.properties.name}: ${object.properties.victims}`
+        }
+      />
     </>
   )
 }
