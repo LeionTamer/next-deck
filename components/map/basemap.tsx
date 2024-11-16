@@ -4,6 +4,7 @@ import React from 'react'
 import { Map } from 'react-map-gl/maplibre'
 import DeckGL, { DeckGLProps } from '@deck.gl/react'
 import 'maplibre-gl/dist/maplibre-gl.css'
+import { bodyHeight } from '@/const/layout-style'
 
 interface IBaseMapProps extends DeckGLProps {
   height?: string
@@ -14,7 +15,7 @@ interface IBaseMapProps extends DeckGLProps {
 }
 
 export default function BaseMap({
-  height = '40rem',
+  height = bodyHeight,
   width = '100vw',
   zoom = 12,
   latitude = -33.865143,

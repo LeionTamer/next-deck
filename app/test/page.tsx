@@ -1,14 +1,13 @@
-import BaseMap from '@/components/map/basemap'
-import { getNeighborhood } from '@/db/nyc/neighborhood'
+// import BaseMap from '@/components/map/basemap'
+import { getCrimeGeoJSON } from '@/db/nyc/neighborhood'
+import NYCMap from './_components/nyc-map'
 
 export default async function TestPage() {
-  // const neighborhood = await getNeighborhood()
-
-  // console.table(neighborhood)
+  const crimes = await getCrimeGeoJSON()
 
   return (
     <>
-      <BaseMap />
+      <NYCMap crimes={crimes!} />
     </>
   )
 }
