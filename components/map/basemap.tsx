@@ -18,8 +18,8 @@ export default function BaseMap({
   height = bodyHeight,
   width = '100vw',
   zoom = 12,
-  latitude = -33.865143,
-  longitude = 151.2099,
+  latitude = -25,
+  longitude = 135,
   ...props
 }: IBaseMapProps) {
   return (

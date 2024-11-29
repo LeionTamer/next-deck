@@ -1,6 +1,5 @@
 import pgPool from '@/lib/postgres'
 import { Feature, Geometry } from 'geojson'
-import { json } from 'stream/consumers'
 
 export async function getNeighborhood() {
   try {
