@@ -14,7 +14,7 @@ export default function AUMapComponent({ areas }: AUMapComponentPropType) {
 
     stroke: true,
     filled: true,
-    getFillColor: (f) => [20, 20, 20, 20],
+    getFillColor: [20, 20, 20, 20],
     stroked: true,
 
     getLineWidth: 250,
