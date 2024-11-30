@@ -17,8 +17,8 @@ interface IBaseMapProps extends DeckGLProps {
 export default function BaseMap({
   height = bodyHeight,
   width = '100vw',
-  zoom = 12,
-  latitude = -25,
+  zoom = 4,
+  latitude = -27,
   longitude = 135,
   ...props
 }: IBaseMapProps) {

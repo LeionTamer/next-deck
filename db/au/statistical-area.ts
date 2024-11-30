@@ -34,8 +34,8 @@ export async function getStatisticalArea() {
                 ),
                 'geometry', ST_AsGeoJSON(ST_Transform(geom, 4326))::json
              )::text as geojson
-        FROM public."SA3_2021_AUST_GDA2020"
-        ORDER BY id ASC   
+        FROM public."SA3_2021_AUST_GDA2020" 
+        ORDER BY id ASC
     `
     const { rows } = await pgPool.query(query)
 
