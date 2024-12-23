@@ -12,6 +12,8 @@ interface IBaseMapProps extends DeckGLProps {
   zoom?: number
   latitude?: number
   longitude?: number
+  pitch?: number
+  bearing?: number
 }
 
 export default function BaseMap({
@@ -20,6 +22,8 @@ export default function BaseMap({
   zoom = 4,
   latitude = -27,
   longitude = 135,
+  pitch = undefined,
+  bearing = undefined,
   ...props
 }: IBaseMapProps) {
   return (
@@ -28,6 +32,8 @@ export default function BaseMap({
         longitude: longitude,
         latitude: latitude,
         zoom,
+        pitch,
+        bearing,
       }}
       controller
       style={{
