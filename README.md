@@ -118,6 +118,21 @@ export default pgPool as Pool
 
 </details>
 
+### Shadcn UI library
+
+Install the initalisation package
+
+```bash
+npx shadcn@latest init -d
+```
+
+Install the components
+
+```bash
+npx shadcn@latest add button command select
+
+```
+
 ## Optional DX libraries
 
 ### prettier-eslint package and configuration
