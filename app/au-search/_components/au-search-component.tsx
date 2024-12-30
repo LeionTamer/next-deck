@@ -4,7 +4,7 @@ import BaseMap from '@/components/map/basemap'
 import useNCLayers from '../_hooks/use-nc-layer'
 
 export default function AUSearchComponent() {
-  const { layers } = useNCLayers({ areaIds: [6, 2], datasetId: 1 })
+  const { layers } = useNCLayers({ areaIds: [3, 77, 33], datasetId: 1 })
 
   return (
     <>

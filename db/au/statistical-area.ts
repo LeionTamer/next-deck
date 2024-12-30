@@ -68,6 +68,29 @@ export async function getStatisticalArea() {
   }
 }
 
+export type StatisiticalAreaByIdType = {
+  coordinates: number[][]
+  // other properties
+}
+
+export async function getStatisticalAreaById(areaId: number) {
+  try {
+    const query = `
+      SELECT array_agg(ARRAY[ST_X(geom), ST_Y(geom)]) AS coordinates
+      FROM (
+        SELECT (ST_DumpPoints(ST_Transform(geom, 4326))).geom
+        FROM statistical_areas
+        WHERE id = ${areaId}
+      ) AS points
+    `
+    const { rows } = await pgPool.query(query)
+
+    return rows as StatisiticalAreaByIdType[]
+  } catch (e) {
+    console.error(e)
+  }
+}
+
 export type AreaListItemType = {
   id: number
   sa3_name: string

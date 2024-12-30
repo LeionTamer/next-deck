@@ -1,5 +1,6 @@
 import { NCDatasetValuesType } from '@/db/au/nc-dataset'
-import { CompositeLayer, Layer, ScatterplotLayer } from 'deck.gl'
+import { StatisiticalAreaByIdType } from '@/db/au/statistical-area'
+import { CompositeLayer, Layer, PolygonLayer, ScatterplotLayer } from 'deck.gl'
 
 export interface ISANCLayer {
   areaId: number
@@ -20,6 +21,18 @@ export class SANCLayer extends CompositeLayer<ISANCLayer> {
         getLineWidth: 10,
         radiusScale: 6,
         pickable: true,
+      }),
+      new PolygonLayer<StatisiticalAreaByIdType>({
+        id: `nc-polygon-layer-${this.props.areaId}`,
+        data: `/api/au-sa?areaId=${this.props.areaId}`,
+        getPolygon: (d: StatisiticalAreaByIdType) => d.coordinates,
+        getFillColor: [20, 20, 20, 20],
+        getLineColor: [255, 30, 255, 160],
+        filled: true,
+        stroked: true,
+        lineWidthMinPixels: 2,
+        pickable: true,
+        getLineWidth: 500,
       }),
     ]
   }

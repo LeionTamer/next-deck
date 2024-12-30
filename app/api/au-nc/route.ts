@@ -11,7 +11,5 @@ export async function GET(req: Request) {
     datasetId: parseInt(datasetId!),
   })
 
-  console.table(data[1])
-
   return Response.json(data)
 }
