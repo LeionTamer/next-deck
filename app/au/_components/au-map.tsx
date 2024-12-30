@@ -17,7 +17,7 @@ export default function AUMapComponent({ areas }: AUMapComponentPropType) {
     getFillColor: [20, 20, 20, 20],
     stroked: true,
 
-    getLineWidth: 250,
+    getLineWidth: 1000,
     getLineColor: [255, 30, 255, 160],
   })
 

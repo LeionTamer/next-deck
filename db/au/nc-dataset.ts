@@ -55,7 +55,7 @@ export async function getDatasetValues(id: number) {
                 ST_X(geom) as lon, 
                 ST_Y(geom) as lat 
             FROM nc_dataset_values 
-            WHERE dataset_id = 1
+            WHERE dataset_id = ${id}
         `
 
     const { rows } = await pgPool.query(query)
@@ -84,6 +84,36 @@ export async function getDatasetValueRange(id: number) {
   } catch (e) {
     throw new Error(
       `Failed to retrive data with datasetId ${id} with error ${e}`
+    )
+  }
+}
+
+export async function getAreaFilteredDataset({
+  areaId,
+  datasetId,
+}: {
+  areaId: number
+  datasetId: number
+}) {
+  try {
+    const query = `
+          SELECT 
+            nc.id AS id,
+            nc.value AS value,
+            ST_X(nc.geom) as lon, 
+            ST_Y(nc.geom) as lat 
+          FROM statistical_areas AS sa
+          JOIN nc_dataset_values AS nc
+          ON ST_Within(nc.geom, sa.geom)
+          WHERE sa.id = ${areaId} AND nc.dataset_id = ${datasetId};
+        `
+
+    const { rows } = await pgPool.query(query)
+
+    return rows as NCDatasetValuesType[]
+  } catch (e) {
+    throw new Error(
+      `Failed to retrive data with datasetId ${datasetId} with error ${e}`
     )
   }
 }
