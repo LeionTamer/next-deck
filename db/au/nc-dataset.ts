@@ -4,8 +4,10 @@ export type NCDatasetType = {
   id: number
   filename: string
   variable: string
-  long_name: string
+  name: string
   units: string
+  min: number
+  max: number
 }
 
 export type NCDatasetValuesType = {
@@ -18,13 +20,21 @@ export type NCDatasetValuesType = {
 export async function getAvailableDatasets() {
   try {
     const query = `
-            SELECT 
-                id,
-                filename,
-                variable, 
-                long_name, 
-                units
-            FROM nc_dataset
+      SELECT 
+        nc_values.id AS id,
+        dataset.long_name AS name,
+        dataset.filename AS filename,
+        dataset.units AS units,
+        nc_values.min AS min,
+        nc_values.max AS max
+      FROM (SELECT 
+          dataset_id AS id,
+          MIN(value) AS min,
+          MAX(value) AS max
+        FROM nc_dataset_values
+        GROUP BY dataset_id) AS nc_values
+      JOIN nc_dataset AS dataset
+      ON dataset.id = nc_values.id
         `
     const { rows } = await pgPool.query(query)
 

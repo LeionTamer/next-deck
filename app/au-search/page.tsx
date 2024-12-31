@@ -1,11 +1,18 @@
+import { getAvailableDatasets, NCDatasetType } from '@/db/au/nc-dataset'
 import AUSearchComponent from './_components/au-search-component'
 
 export default async function SearchPage() {
-  //   const dataset = await getAreaByName('Adel')
+  const dataset_info = await getAvailableDatasets()
+  const dataset_table = dataset_info.reduce(
+    (accumulator, entry) => {
+      return { ...accumulator, [entry.id]: entry }
+    },
+    {} as Record<number, NCDatasetType>
+  )
 
   return (
     <>
-      <AUSearchComponent />
+      <AUSearchComponent dataset_table={dataset_table} />
     </>
   )
 }
