@@ -1,6 +1,5 @@
 import pgPool from '@/lib/postgres'
 import { Feature, Geometry } from 'geojson'
-import { ChevronsDownUp } from 'lucide-react'
 
 type StatisticalAreaResponseType = {
   id: number
@@ -78,7 +77,7 @@ export async function getStatisticalAreaById(areaId: number) {
     const query = `
       SELECT array_agg(ARRAY[ST_X(geom), ST_Y(geom)]) AS coordinates
       FROM (
-        SELECT (ST_DumpPoints(ST_Transform(geom, 4326))).geom
+        SELECT (ST_DumpPoints(ST_Transform(geometry, 4326))).geom
         FROM statistical_areas
         WHERE id = ${areaId}
       ) AS points
@@ -114,6 +113,6 @@ export async function getAreaByName(name: string) {
 
     return rows as AreaListItemType[]
   } catch (e) {
-    throw new Error('search by SA4 name failed')
+    throw new Error(`search by SA4 name failed with error ${e}`)
   }
 }

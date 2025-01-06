@@ -114,7 +114,7 @@ export async function getAreaFilteredDataset({
             ST_Y(nc.geom) as lat 
           FROM statistical_areas AS sa
           JOIN nc_dataset_values AS nc
-          ON ST_Within(nc.geom, sa.geom)
+          ON ST_Within(nc.geom, ST_Transform(sa.geometry,4326))
           WHERE sa.id = ${areaId} AND nc.dataset_id = ${datasetId};
         `
 
