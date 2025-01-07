@@ -3,7 +3,7 @@
 import BaseMap from '@/components/map/basemap'
 import useNCLayers from '../_hooks/use-nc-layer'
 import { NCDatasetType } from '@/db/au/nc-dataset'
-import useAreaSearch from '@/hooks/useAreaSearch'
+import useAreaSearch from '@/hooks/use-area-search'
 import { SidebarTrigger } from '@/components/ui/sidebar'
 
 interface AUSearchComponentProps {
