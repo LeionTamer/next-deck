@@ -22,6 +22,7 @@ export default async function SearchPage() {
             '--sidebar-width-mobile': '20rem',
           } as CSSProperties
         }
+        defaultOpen={false}
       >
         <AUSearchSidebar />
         <AUSearchComponent dataset_table={dataset_table} />

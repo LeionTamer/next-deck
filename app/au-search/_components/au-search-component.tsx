@@ -3,8 +3,9 @@
 import BaseMap from '@/components/map/basemap'
 import useNCLayers from '../_hooks/use-nc-layer'
 import { NCDatasetType } from '@/db/au/nc-dataset'
-import useAreaSearch from '@/hooks/use-area-search'
+import useAreaSearch, { selectedAreasAtom } from '@/hooks/use-area-search'
 import { SidebarTrigger } from '@/components/ui/sidebar'
+import { useAtomValue } from 'jotai'
 
 interface AUSearchComponentProps {
   dataset_table: Record<number, NCDatasetType>
@@ -13,8 +14,9 @@ interface AUSearchComponentProps {
 export default function AUSearchComponent({
   dataset_table,
 }: AUSearchComponentProps) {
-  const { searchField, stateAreas } = useAreaSearch()
-  const areaIds = stateAreas.map((area) => area.id)
+  const { searchField } = useAreaSearch()
+  const selectedAreas = useAtomValue(selectedAreasAtom)
+  const areaIds = selectedAreas.map((area) => area.id)
 
   const { layers } = useNCLayers({
     areaIds,

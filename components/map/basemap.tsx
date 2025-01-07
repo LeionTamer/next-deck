@@ -5,36 +5,24 @@ import { Map } from 'react-map-gl/maplibre'
 import DeckGL, { DeckGLProps } from '@deck.gl/react'
 import 'maplibre-gl/dist/maplibre-gl.css'
 import { bodyHeight } from '@/const/layout-style'
+import { useAtomValue } from 'jotai'
+import { mapViewStateAtom } from './deck-instance'
 
 interface IBaseMapProps extends DeckGLProps {
   height?: string
   width?: string
-  zoom?: number
-  latitude?: number
-  longitude?: number
-  pitch?: number
-  bearing?: number
 }
 
 export default function BaseMap({
   height = bodyHeight,
   width = '100vw',
-  zoom = 4,
-  latitude = -27,
-  longitude = 135,
-  pitch = undefined,
-  bearing = undefined,
   ...props
 }: IBaseMapProps) {
+  const mapViewState = useAtomValue(mapViewStateAtom)
+
   return (
     <DeckGL
-      initialViewState={{
-        longitude: longitude,
-        latitude: latitude,
-        zoom,
-        pitch,
-        bearing,
-      }}
+      initialViewState={mapViewState}
       controller
       style={{
         height,

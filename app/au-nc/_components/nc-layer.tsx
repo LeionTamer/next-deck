@@ -64,8 +64,6 @@ export default function NCMap({
   return (
     <BaseMap
       height="100vh"
-      pitch={15}
-      bearing={12}
       layers={[gridLayer, heatmapLayer, scatterPlotLayer]}
       controller
       onClick={(info: PickingInfo<NCDatasetType>) => {

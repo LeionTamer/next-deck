@@ -94,16 +94,19 @@ export type AreaListItemType = {
   id: number
   sa3_name: string
   sa4_name: string
+  lon: number
+  lat: number
 }
-// TODO:
-// Add page for search results with dataset and params
+
 export async function getAreaByName(name: string) {
   try {
     const query = `
       SELECT 
         id,
         sa3_name as sa3_name,
-        sa4_name as sa4_name
+        sa4_name as sa4_name,
+        ST_X(ST_Centroid(geometry)) as lon,
+        ST_Y(ST_Centroid(geometry)) as lat
       FROM statistical_areas
       WHERE sa4_name LIKE '${name}%' OR sa3_name LIKE '${name}%'
       ORDER BY id ASC 
