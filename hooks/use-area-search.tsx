@@ -58,8 +58,8 @@ export default function useAreaSearch() {
           placeholder="Search for statistical area 3"
         />
       </PopoverAnchor>
-      <PopoverContent>
-        <div>
+      <PopoverContent style={{ width: '460px' }}>
+        <>
           {filteredData &&
             filteredData.map((entry) => (
               <div
@@ -75,7 +75,7 @@ export default function useAreaSearch() {
                 {entry.sa3_name}
               </div>
             ))}
-        </div>
+        </>
       </PopoverContent>
     </Popover>
   )
