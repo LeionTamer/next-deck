@@ -4,6 +4,7 @@ import BaseMap from '@/components/map/basemap'
 import useNCLayers from '../_hooks/use-nc-layer'
 import { NCDatasetType } from '@/db/au/nc-dataset'
 import useAreaSearch from '@/hooks/useAreaSearch'
+import { SidebarTrigger } from '@/components/ui/sidebar'
 
 interface AUSearchComponentProps {
   dataset_table: Record<number, NCDatasetType>
@@ -26,26 +27,17 @@ export default function AUSearchComponent({
       <div>
         <BaseMap
           height="100vh"
+          width="100%"
           layers={[layers]}
-          // onHover={(info) => console.log(info)}
           onClick={(info) => console.table(info.object)}
         />
       </div>
-      {/* <div className="absolute right-12 top-12 z-50 min-w-96 bg-slate-200 p-2"> */}
-      <div className="absolute left-1/2 top-10 z-50 mx-auto min-w-[500px] -translate-x-1/2 transform bg-slate-100">
-        {searchField}
+      <div className="absolute left-1/2 top-5 z-50 mx-auto flex min-w-[500px] -translate-x-1/2 transform gap-1">
+        <div className="grow">{searchField}</div>
+        <div className="my-auto h-full rounded-full border-2 bg-slate-100">
+          <SidebarTrigger variant="secondary" />
+        </div>
       </div>
-      {/* <Sheet>
-        <SheetTrigger>
-          <div className="absolute right-12 top-12 z-50 bg-slate-200 p-2">
-            Search
-          </div>
-        </SheetTrigger>
-        <SheetContent>
-          <div>{searchField}</div>
-        </SheetContent>
-      </Sheet> */}
-      {/* </div> */}
     </>
   )
 }

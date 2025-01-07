@@ -33,7 +33,7 @@ export default function useAreaSearch() {
         <Input
           value={text}
           onChange={(e) => setText(e.currentTarget.value)}
-          className="w-full"
+          className="w-full bg-slate-300"
           placeholder="Search for statistical area 3"
         />
       </PopoverAnchor>
