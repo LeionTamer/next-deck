@@ -7,7 +7,6 @@ type StatisticalAreaResponseType = {
   code: string
   gcc_name: string
   gcc_code: string
-  area_sqkm: string
   ste_name: string
   ste_code: string
   geojson: string
@@ -18,26 +17,28 @@ export type StatisticalAreaSearchEntry = {
   sa4_name: string
 }
 
+export type StatisticalAreaGeometryType = Feature<
+  Geometry,
+  {
+    sa3_name: string
+    sa3_code: string
+    sa4_name: string
+    sa4_code: string
+  }
+>
+
 export type StatisticalAreaType = Omit<
   StatisticalAreaResponseType,
   'geojson'
 > & {
-  geojson: Feature<
-    Geometry,
-    {
-      sa3_name: string
-      sa3_code: string
-      sa4_name: string
-      sa4_code: string
-    }
-  >
+  geojson: StatisticalAreaGeometryType
 }
 
 export async function getStatisticalArea() {
   try {
     const query = `
       SELECT 
-        id, sa3_code, sa3_name, gcc_name, gcc_code, area_sqkm, ste_name, ste_code,
+        id, sa3_code, sa3_name, gcc_name, gcc_code, ste_name, ste_code,
         json_build_object(
         'type','polygon',
         'properties', json_build_object(
@@ -67,24 +68,35 @@ export async function getStatisticalArea() {
   }
 }
 
-export type StatisiticalAreaByIdType = {
-  coordinates: number[][]
-  // other properties
-}
-
-export async function getStatisticalAreaById(areaId: number) {
+export async function getSA3GeoJSONByID(areaId: number) {
   try {
     const query = `
-      SELECT array_agg(ARRAY[ST_X(geom), ST_Y(geom)]) AS coordinates
-      FROM (
-        SELECT (ST_DumpPoints(ST_Transform(geometry, 4326))).geom
-        FROM statistical_areas
-        WHERE id = ${areaId}
-      ) AS points
+      SELECT 
+        id, sa3_code, sa3_name, gcc_name, gcc_code, ste_name,
+        json_build_object(
+        'type','polygon',
+        'properties', json_build_object(
+          'sa3_name', sa3_name,
+          'sa3_code', sa3_code,
+          'sa4_name', sa4_name,
+          'sa4_code', sa4_code
+          ),
+          'geometry', ST_AsGeoJSON(ST_Transform(geometry, 4326))::json
+        )::text as geojson
+      FROM statistical_areas 
+      WHERE id = ${areaId}
     `
     const { rows } = await pgPool.query(query)
 
-    return rows as StatisiticalAreaByIdType[]
+    const data = rows.map(
+      (entry: StatisticalAreaResponseType) =>
+        ({
+          ...entry,
+          geojson: JSON.parse(entry.geojson),
+        }) as StatisticalAreaType
+    )
+
+    return data
   } catch (e) {
     console.error(e)
   }
