@@ -1,6 +1,6 @@
 'use client'
 
-import { mapViewStateAtom } from '@/components/map/deck-instance'
+import { useMapControl } from '@/components/map/deck-instance'
 import {
   Sidebar,
   SidebarContent,
@@ -10,29 +10,13 @@ import {
 } from '@/components/ui/sidebar'
 import { AreaListItemType } from '@/db/au/statistical-area'
 import { selectedAreasAtom, stat4AreasAtom } from '@/hooks/use-area-search'
-import { FlyToInterpolator } from 'deck.gl'
-import { useAtomValue, useSetAtom } from 'jotai'
-import { useCallback } from 'react'
+import { useAtomValue } from 'jotai'
 
 export default function AUSearchSidebar() {
   const selectedAreas = useAtomValue(selectedAreasAtom)
   const stat4Areas = useAtomValue(stat4AreasAtom)
-  const setMapViewState = useSetAtom(mapViewStateAtom)
 
-  const flyToCity = useCallback(
-    ({ lat, lon }: { lat: number; lon: number }) => {
-      setMapViewState((view) => ({
-        ...view,
-        longitude: lon,
-        latitude: lat,
-        zoom: 12,
-        transitionInterpolator: new FlyToInterpolator({ speed: 2 }),
-        transitionDuration: 'auto',
-      }))
-    },
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    []
-  )
+  const { flyToCity } = useMapControl()
 
   const areaGroup: Record<string, AreaListItemType[]> = Object.keys(
     stat4Areas

@@ -1,12 +1,11 @@
 import { searchAreaByNameAction } from '@/actions/statistical_area'
-import { mapViewStateAtom } from '@/components/map/deck-instance'
+import { useMapControl } from '@/components/map/deck-instance'
 import { Input } from '@/components/ui/input'
 import { Popover, PopoverAnchor, PopoverContent } from '@/components/ui/popover'
 import { AreaListItemType } from '@/db/au/statistical-area'
 import { useMutation } from '@tanstack/react-query'
-import { FlyToInterpolator } from 'deck.gl'
 import { atom, useAtom, useSetAtom } from 'jotai'
-import { useCallback, useEffect, useState } from 'react'
+import { useEffect, useState } from 'react'
 import { useDebounce } from 'use-debounce'
 
 export const selectedAreasAtom = atom<AreaListItemType[]>([])
@@ -17,7 +16,8 @@ export default function useAreaSearch() {
   const [searchText, setSearchText] = useDebounce(text, 1000)
   const [selectedAreas, setSelectedAreas] = useAtom(selectedAreasAtom)
   const setSA4Areas = useSetAtom(stat4AreasAtom)
-  const setMapViewState = useSetAtom(mapViewStateAtom)
+
+  const { flyToCity } = useMapControl()
 
   const { data, mutate, reset } = useMutation({
     mutationKey: ['search-area'],
@@ -34,21 +34,6 @@ export default function useAreaSearch() {
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [searchText])
-
-  const flyToCity = useCallback(
-    ({ lat, lon }: { lat: number; lon: number }) => {
-      setMapViewState((view) => ({
-        ...view,
-        longitude: lon,
-        latitude: lat,
-        zoom: 12,
-        transitionInterpolator: new FlyToInterpolator({ speed: 2 }),
-        transitionDuration: 'auto',
-      }))
-    },
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    []
-  )
 
   function getSA4Neighboors(code: string) {
     fetch(`api/au-sa/${code}`)
