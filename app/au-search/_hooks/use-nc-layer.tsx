@@ -2,6 +2,8 @@
 
 import { SANCLayer } from '@/components/map/layers/sa-nc-layer'
 import { NCDatasetType } from '@/db/au/nc-dataset'
+import { StatisticalAreaGeometryType } from '@/db/au/statistical-area'
+import { GeoJsonLayer } from 'deck.gl'
 
 export type UseNCLayerProps = {
   areaIds: number[]
@@ -23,5 +25,20 @@ export default function useNCLayers({
         datasetInfo: dataset_table[datasetId],
       })
   )
-  return { layers: layers }
+
+  const geoLayers = areaIds.map(
+    (areaId) =>
+      new GeoJsonLayer<StatisticalAreaGeometryType>({
+        id: `geojson-layer-${areaId}`,
+        data: `/api/au-sa?areaId=${areaId}`,
+        stroked: true,
+        filled: false,
+        pickable: true,
+        getLineColor: [160, 160, 180, 200],
+        getLineWidth: 300,
+        getPointRadius: 4,
+        getTextSize: 12,
+      })
+  )
+  return { layers: [...layers, ...geoLayers] }
 }

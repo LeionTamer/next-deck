@@ -39,7 +39,7 @@ export default function useAreaSearch() {
         ...view,
         longitude: lon,
         latitude: lat,
-        zoom: 8,
+        zoom: 12,
         transitionInterpolator: new FlyToInterpolator({ speed: 2 }),
         transitionDuration: 'auto',
       }))
@@ -47,6 +47,16 @@ export default function useAreaSearch() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
     []
   )
+
+  function getSA4Neighboors(code: string) {
+    fetch(`api/au-sa/${code}`)
+      .then((res) => res.json())
+      .then((data: AreaListItemType[]) => {
+        console.table(data)
+        setSelectedAreas((prev) => [...prev, ...data])
+      })
+      .catch((e) => console.error(e))
+  }
 
   const searchField = (
     <Popover open={data && data.length >= 1}>
@@ -65,14 +75,14 @@ export default function useAreaSearch() {
               <div
                 key={entry.id}
                 onClick={() => {
-                  setSelectedAreas((prev) => [...prev, entry])
+                  getSA4Neighboors(entry.sa4_code)
                   setText('')
                   setSearchText('')
                   reset()
                   flyToCity({ lat: entry.lat, lon: entry.lon })
                 }}
               >
-                {entry.sa3_name}
+                {entry.sa4_name}: {entry.sa3_name}
               </div>
             ))}
         </>
