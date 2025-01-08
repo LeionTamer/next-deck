@@ -10,11 +10,13 @@ import { useCallback, useEffect, useState } from 'react'
 import { useDebounce } from 'use-debounce'
 
 export const selectedAreasAtom = atom<AreaListItemType[]>([])
+export const stat4AreasAtom = atom<Record<string, string>>({})
 
 export default function useAreaSearch() {
   const [text, setText] = useState('')
   const [searchText, setSearchText] = useDebounce(text, 1000)
   const [selectedAreas, setSelectedAreas] = useAtom(selectedAreasAtom)
+  const setSA4Areas = useSetAtom(stat4AreasAtom)
   const setMapViewState = useSetAtom(mapViewStateAtom)
 
   const { data, mutate, reset } = useMutation({
@@ -76,6 +78,10 @@ export default function useAreaSearch() {
                 key={entry.id}
                 onClick={() => {
                   getSA4Neighboors(entry.sa4_code)
+                  setSA4Areas((prev) => ({
+                    ...prev,
+                    [entry.sa4_code]: entry.sa4_name,
+                  }))
                   setText('')
                   setSearchText('')
                   reset()
