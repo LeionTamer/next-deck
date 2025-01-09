@@ -6,7 +6,7 @@ import { NCDatasetType } from '@/db/au/nc-dataset'
 import useAreaSearch, { selectedAreasAtom } from '@/hooks/use-area-search'
 import { useAtomValue } from 'jotai'
 import { layersAtom } from '@/components/map/deck-instance'
-import { RightSidebarTrigger } from './right-sidebar-trigger'
+import { RightSidebarTrigger } from './sidebar/right-sidebar-trigger'
 
 interface AUSearchComponentProps {
   dataset_table: Record<number, NCDatasetType>
