@@ -7,6 +7,8 @@ import useAreaSearch, { selectedAreasAtom } from '@/hooks/use-area-search'
 import { useAtomValue } from 'jotai'
 import { layersAtom } from '@/components/map/deck-instance'
 import { RightSidebarTrigger } from './sidebar/right-sidebar-trigger'
+import { useCallback } from 'react'
+import { PickingInfo } from 'deck.gl'
 
 interface AUSearchComponentProps {
   dataset_table: Record<number, NCDatasetType>
@@ -25,6 +27,13 @@ export default function AUSearchComponent({
     datasetId: 1,
     dataset_table,
   })
+  const getTooltip = useCallback(({ object }: PickingInfo) => {
+    return (
+      object && {
+        html: `<div>${object.value}<div>`,
+      }
+    )
+  }, [])
 
   return (
     <>
@@ -35,6 +44,7 @@ export default function AUSearchComponent({
           width="100%"
           layers={[layers, ...dataLayers]}
           onClick={(info) => console.table(info.object)}
+          getTooltip={getTooltip}
         />
       </div>
       <div className="absolute left-1/2 top-5 z-50 mx-auto flex min-w-[500px] -translate-x-1/2 transform gap-1">

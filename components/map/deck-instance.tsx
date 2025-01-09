@@ -12,6 +12,11 @@ export const mapViewStateAtom = atom<MapViewState>({
 
 export const layersAtom = atom<Layer[]>([])
 
+export const visibleLayers = ['scatter-plot'] as const
+export type VisibleLayersType = (typeof visibleLayers)[number]
+
+export const visibleLayersTypeAtom = atom<VisibleLayersType[]>(['scatter-plot'])
+
 export function useMapControl() {
   const setMapViewState = useSetAtom(mapViewStateAtom)
 
