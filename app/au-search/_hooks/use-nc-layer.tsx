@@ -1,6 +1,6 @@
 'use client'
 
-import { SANCLayer } from '@/components/map/layers/sa-nc-layer'
+import SANCDataLayer from '@/components/map/layers/sa-nc-data-layer'
 import { NCDatasetType } from '@/db/au/nc-dataset'
 import { StatisticalAreaGeometryType } from '@/db/au/statistical-area'
 import { GeoJsonLayer } from 'deck.gl'
@@ -16,15 +16,14 @@ export default function useNCLayers({
   datasetId,
   dataset_table,
 }: UseNCLayerProps) {
-  const layers = areaIds.map(
-    (areaId) =>
-      new SANCLayer({
-        areaId: areaId,
-        datasetId: datasetId,
-        id: `usenc-${areaId}-${datasetId}`,
-        datasetInfo: dataset_table[datasetId],
-      })
-  )
+  const data_layers = areaIds.map((areaId) => (
+    <SANCDataLayer
+      key={`sa-nc-datalayer-${areaId}-${datasetId}`}
+      areaId={areaId}
+      datasetId={datasetId}
+      dataset_table={dataset_table}
+    />
+  ))
 
   const geoLayers = areaIds.map(
     (areaId) =>
@@ -40,5 +39,5 @@ export default function useNCLayers({
         getTextSize: 12,
       })
   )
-  return { layers: [...layers, ...geoLayers] }
+  return { layers: [...geoLayers], data_layers }
 }

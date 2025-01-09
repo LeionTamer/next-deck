@@ -1,4 +1,4 @@
-import { FlyToInterpolator, MapViewState } from 'deck.gl'
+import { FlyToInterpolator, Layer, MapViewState } from 'deck.gl'
 import { atom, useSetAtom } from 'jotai'
 import { useCallback } from 'react'
 
@@ -9,6 +9,8 @@ export const mapViewStateAtom = atom<MapViewState>({
   pitch: undefined,
   bearing: undefined,
 })
+
+export const layersAtom = atom<Layer[]>([])
 
 export function useMapControl() {
   const setMapViewState = useSetAtom(mapViewStateAtom)

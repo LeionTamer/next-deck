@@ -13,7 +13,7 @@ export class SANCLayer extends CompositeLayer<ISANCLayer> {
     return [
       new ScatterplotLayer({
         id: `nc-scatter-plot-${this.props.areaId}`,
-        data: `/api/au-nc?areaId=${this.props.areaId}&datasetId=${this.props.datasetId}`,
+        data: this.props.data as NCDatasetValuesType[],
         getPosition: (d: NCDatasetValuesType) => [d.lon, d.lat],
         stroked: true,
         getRadius: 200,
@@ -37,4 +37,5 @@ SANCLayer.layerName = 'SANCLayer'
 SANCLayer.defaultProps = {
   areaId: { type: 'number' },
   datasetId: { type: 'number' },
+  data: { type: 'object' },
 }
