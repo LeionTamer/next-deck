@@ -5,7 +5,7 @@ import useNCLayers from '../_hooks/use-nc-layer'
 import { NCDatasetType } from '@/db/au/nc-dataset'
 import useAreaSearch, { selectedAreasAtom } from '@/hooks/use-area-search'
 import { useAtomValue } from 'jotai'
-import { layersAtom } from '@/components/map/deck-instance'
+import { useMapControl } from '@/components/map/deck-instance'
 import { RightSidebarTrigger } from './sidebar/right-sidebar-trigger'
 import { useCallback } from 'react'
 import { PickingInfo } from 'deck.gl'
@@ -19,7 +19,8 @@ export default function AUSearchComponent({
 }: AUSearchComponentProps) {
   const { searchField } = useAreaSearch()
   const selectedAreas = useAtomValue(selectedAreasAtom)
-  const dataLayers = useAtomValue(layersAtom)
+  const { allLayers } = useMapControl()
+
   const areaIds = selectedAreas.map((area) => area.id)
 
   const { layers, data_layers } = useNCLayers({
@@ -42,7 +43,7 @@ export default function AUSearchComponent({
         <BaseMap
           height="100vh"
           width="100%"
-          layers={[layers, ...dataLayers]}
+          layers={[layers, ...allLayers]}
           onClick={(info) => console.table(info.object)}
           getTooltip={getTooltip}
         />

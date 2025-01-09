@@ -1,5 +1,5 @@
 import { FlyToInterpolator, Layer, MapViewState } from 'deck.gl'
-import { atom, useSetAtom } from 'jotai'
+import { atom, useAtom, useSetAtom } from 'jotai'
 import { useCallback } from 'react'
 
 export const mapViewStateAtom = atom<MapViewState>({
@@ -10,7 +10,12 @@ export const mapViewStateAtom = atom<MapViewState>({
   bearing: undefined,
 })
 
-export const layersAtom = atom<Layer[]>([])
+export type LayerByIDType = {
+  id: string
+  layer: Layer
+}
+
+export const layersByIDAtom = atom<LayerByIDType[]>([])
 
 export const visibleLayers = ['scatter-plot'] as const
 export type VisibleLayersType = (typeof visibleLayers)[number]
@@ -19,6 +24,16 @@ export const visibleLayersTypeAtom = atom<VisibleLayersType[]>(['scatter-plot'])
 
 export function useMapControl() {
   const setMapViewState = useSetAtom(mapViewStateAtom)
+  const [layersById, setLayersByID] = useAtom(layersByIDAtom)
+
+  const allLayers = layersById.map((entry) => entry.layer)
+
+  function addLayerById({ id, layer }: LayerByIDType) {
+    setLayersByID((prev) => [
+      ...prev.filter((current) => current.id !== id),
+      { id, layer },
+    ])
+  }
 
   const flyToCity = useCallback(
     ({ lat, lon }: { lat: number; lon: number }) => {
@@ -35,5 +50,5 @@ export function useMapControl() {
     []
   )
 
-  return { flyToCity }
+  return { flyToCity, addLayerById, allLayers }
 }

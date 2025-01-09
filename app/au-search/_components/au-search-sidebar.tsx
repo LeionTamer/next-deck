@@ -12,12 +12,11 @@ import { AreaListItemType } from '@/db/au/statistical-area'
 import { selectedAreasAtom, stat4AreasAtom } from '@/hooks/use-area-search'
 import { useAtomValue } from 'jotai'
 import AreaGroups from './sidebar/area-groups'
+import VisualsGroup from './sidebar/visuals-group'
 
 export default function AUSearchSidebar() {
   const selectedAreas = useAtomValue(selectedAreasAtom)
   const stat4Areas = useAtomValue(stat4AreasAtom)
-
-  // const { flyToCity } = useMapControl()
 
   const areaGroup: Record<string, AreaListItemType[]> = Object.keys(
     stat4Areas
@@ -32,14 +31,11 @@ export default function AUSearchSidebar() {
   return (
     <Sidebar side="right" variant="inset">
       <SidebarContent className="border-2 p-2">
+        <VisualsGroup />
         <SidebarGroup>
           <SidebarGroupLabel>Area Information</SidebarGroupLabel>
           <SidebarGroupContent>
-            {/* <SidebarMenu> */}
             {Object.keys(areaGroup).map((entry) => (
-              // <SidebarMenuItem key={entry}>
-              //   {stat4Areas[entry]}
-              // </SidebarMenuItem>
               <AreaGroups
                 key={entry}
                 areaCode={entry}

@@ -1,9 +1,9 @@
 import { useQuery } from '@tanstack/react-query'
-import { useSetAtom } from 'jotai'
-import { layersAtom } from '../deck-instance'
 import { useEffect } from 'react'
 import { SANCLayer } from './sa-nc-layer'
 import { NCDatasetType } from '@/db/au/nc-dataset'
+import { useMapControl, visibleLayersTypeAtom } from '../deck-instance'
+import { useAtomValue } from 'jotai'
 
 export interface ISANCDataLayerProps {
   areaId: number
@@ -16,7 +16,11 @@ export default function SANCDataLayer({
   datasetId,
   dataset_table,
 }: ISANCDataLayerProps) {
-  const addLayer = useSetAtom(layersAtom)
+  const { addLayerById } = useMapControl()
+  const showLayers = useAtomValue(visibleLayersTypeAtom)
+
+  const showLayer = showLayers.includes('scatter-plot')
+
   const { data } = useQuery({
     queryKey: ['sa-nc-data', 'sa3-areaId', areaId, 'datasetId', datasetId],
     queryFn: async () => {
@@ -27,20 +31,23 @@ export default function SANCDataLayer({
     },
   })
 
+  const layerId = `usenc-${areaId}-${datasetId}`
+
   useEffect(() => {
-    if (!!data) {
-      const dataLayer = new SANCLayer({
+    addLayerById({
+      id: layerId,
+      layer: new SANCLayer({
         areaId: areaId,
         datasetId: datasetId,
-        id: `usenc-${areaId}-${datasetId}`,
+        visible: showLayer,
+        id: layerId,
         datasetInfo: dataset_table[datasetId],
         data: data,
-      })
+      }),
+    })
 
-      addLayer((layers) => [...layers, dataLayer])
-    }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [data])
+  }, [data, showLayer])
 
   return null
 }
