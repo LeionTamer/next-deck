@@ -1,11 +1,18 @@
 import { valueToRgba } from '@/app/helpers/colorHelpers'
 import { NCDatasetType, NCDatasetValuesType } from '@/db/au/nc-dataset'
-import { CompositeLayer, Layer, ScatterplotLayer } from 'deck.gl'
+import {
+  CompositeLayer,
+  Layer,
+  ScatterplotLayer,
+  ScreenGridLayer,
+} from 'deck.gl'
+import { VisibleLayersType } from '../deck-instance'
 
 export interface ISANCLayer {
   areaId: number
   datasetId: number
   datasetInfo: NCDatasetType
+  showLayers: VisibleLayersType[]
 }
 
 export class SANCLayer extends CompositeLayer<ISANCLayer> {
@@ -27,6 +34,17 @@ export class SANCLayer extends CompositeLayer<ISANCLayer> {
         getLineWidth: 10,
         radiusScale: 6,
         pickable: true,
+
+        visible: this.props.showLayers.includes('scatter-plot'),
+      }),
+      new ScreenGridLayer({
+        id: `nc-grid-map-${this.props.areaId}`,
+        data: this.props.data as NCDatasetValuesType[],
+
+        getPosition: (d: NCDatasetValuesType) => [d.lon, d.lat],
+        getWeight: (d: NCDatasetValuesType) => d.value,
+
+        visible: this.props.showLayers.includes('grid'),
       }),
     ]
   }
@@ -38,4 +56,5 @@ SANCLayer.defaultProps = {
   areaId: { type: 'number' },
   datasetId: { type: 'number' },
   data: { type: 'object' },
+  showLayers: { type: 'array', value: [] as VisibleLayersType[] },
 }

@@ -19,8 +19,6 @@ export default function SANCDataLayer({
   const { addLayerById } = useMapControl()
   const showLayers = useAtomValue(visibleLayersTypeAtom)
 
-  const showLayer = showLayers.includes('scatter-plot')
-
   const { data } = useQuery({
     queryKey: ['sa-nc-data', 'sa3-areaId', areaId, 'datasetId', datasetId],
     queryFn: async () => {
@@ -39,15 +37,15 @@ export default function SANCDataLayer({
       layer: new SANCLayer({
         areaId: areaId,
         datasetId: datasetId,
-        visible: showLayer,
         id: layerId,
         datasetInfo: dataset_table[datasetId],
         data: data,
+        showLayers,
       }),
     })
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [data, showLayer])
+  }, [data, showLayers])
 
   return null
 }

@@ -19,7 +19,7 @@ export default function VisualsGroup() {
       <SidebarContent>
         {visibleLayers.map((entry) => (
           <SidebarMenu key={entry}>
-            <div className="flex justify-between p-2">
+            <div className="mt-2 flex justify-between px-2">
               <div className="flex-grow text-sm">{entry}</div>
               <div>
                 <Checkbox
