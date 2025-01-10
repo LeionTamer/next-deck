@@ -1,11 +1,6 @@
 import { valueToRgba } from '@/app/helpers/colorHelpers'
 import { NCDatasetType, NCDatasetValuesType } from '@/db/au/nc-dataset'
-import {
-  CompositeLayer,
-  Layer,
-  ScatterplotLayer,
-  ScreenGridLayer,
-} from 'deck.gl'
+import { CompositeLayer, HexagonLayer, Layer, ScatterplotLayer } from 'deck.gl'
 import { VisibleLayersType } from '../deck-instance'
 
 export interface ISANCLayer {
@@ -21,6 +16,7 @@ export class SANCLayer extends CompositeLayer<ISANCLayer> {
       new ScatterplotLayer({
         id: `nc-scatter-plot-${this.props.areaId}`,
         data: this.props.data as NCDatasetValuesType[],
+
         getPosition: (d: NCDatasetValuesType) => [d.lon, d.lat],
         stroked: true,
         getRadius: 200,
@@ -33,18 +29,29 @@ export class SANCLayer extends CompositeLayer<ISANCLayer> {
         getLineColor: [0, 0, 0],
         getLineWidth: 10,
         radiusScale: 6,
-        pickable: true,
 
+        pickable: this.props.showLayers.includes('scatter-plot'),
         visible: this.props.showLayers.includes('scatter-plot'),
       }),
-      new ScreenGridLayer({
-        id: `nc-grid-map-${this.props.areaId}`,
+      new HexagonLayer<NCDatasetValuesType>({
+        id: `nc-hex-map-${this.props.areaId}`,
         data: this.props.data as NCDatasetValuesType[],
 
+        extruded: true,
         getPosition: (d: NCDatasetValuesType) => [d.lon, d.lat],
-        getWeight: (d: NCDatasetValuesType) => d.value,
+        getColorWeight: (d: NCDatasetValuesType) => d.value,
+        getElevationWeight: (d: NCDatasetValuesType) => d.value,
+        elevationScale: 1,
+        radius: 2000,
+        colorDomain: [this.props.datasetInfo.min, this.props.datasetInfo.max],
+        colorRange: [
+          [49, 163, 84],
+          [255, 237, 160],
+          [240, 59, 32],
+        ],
 
-        visible: this.props.showLayers.includes('grid'),
+        pickable: this.props.showLayers.includes('hex'),
+        visible: this.props.showLayers.includes('hex'),
       }),
     ]
   }

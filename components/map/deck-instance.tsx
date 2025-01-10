@@ -17,7 +17,7 @@ export type LayerByIDType = {
 
 export const layersByIDAtom = atom<LayerByIDType[]>([])
 
-export const visibleLayers = ['scatter-plot', 'grid'] as const
+export const visibleLayers = ['scatter-plot', 'hex'] as const
 export type VisibleLayersType = (typeof visibleLayers)[number]
 
 export const visibleLayersTypeAtom = atom<VisibleLayersType[]>(['scatter-plot'])
