@@ -51,7 +51,7 @@ export class SANCLayer extends CompositeLayer<ISANCLayer> {
           [240, 59, 32, 95],
         ],
 
-        // pickable: this.props.showLayers.includes('hex'),
+        pickable: this.props.showLayers.includes('hex'),
         visible: this.props.showLayers.includes('hex'),
       }),
     ]

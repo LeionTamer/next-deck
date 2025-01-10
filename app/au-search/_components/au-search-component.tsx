@@ -7,8 +7,14 @@ import useAreaSearch, { selectedAreasAtom } from '@/hooks/use-area-search'
 import { useAtomValue } from 'jotai'
 import { useMapControl } from '@/components/map/deck-instance'
 import { RightSidebarTrigger } from './sidebar/right-sidebar-trigger'
-import { useCallback } from 'react'
+import { useCallback, useState } from 'react'
 import { PickingInfo } from 'deck.gl'
+import {
+  Dialog,
+  DialogContent,
+  DialogOverlay,
+  DialogTrigger,
+} from '@/components/ui/dialog'
 
 interface AUSearchComponentProps {
   dataset_table: Record<number, NCDatasetType>
@@ -20,6 +26,7 @@ export default function AUSearchComponent({
   const { searchField } = useAreaSearch()
   const selectedAreas = useAtomValue(selectedAreasAtom)
   const { allLayers } = useMapControl()
+  const [text, setText] = useState('')
 
   const areaIds = selectedAreas.map((area) => area.id)
 
@@ -31,20 +38,34 @@ export default function AUSearchComponent({
   const getTooltip = useCallback(({ object }: PickingInfo) => {
     return (
       object && {
-        html: `<div>${object.value}<div>`,
+        html: `<div>${JSON.stringify(object, null, 2)}<div>`,
       }
     )
+  }, [])
+
+  const getObjectData = useCallback(({ object }: PickingInfo) => {
+    if (!!object) setText(JSON.stringify(object, null, 2))
   }, [])
 
   return (
     <>
       <div>
+        <Dialog open={text.length >= 3}>
+          <DialogTrigger />
+          <DialogOverlay />
+          <DialogContent
+            onInteractOutside={() => setText('')}
+            onEscapeKeyDown={() => setText('')}
+          >
+            {text}
+          </DialogContent>
+        </Dialog>
         {data_layers}
         <BaseMap
           height="100vh"
           width="100%"
           layers={[layers, ...allLayers]}
-          onClick={(info) => console.table(info.object)}
+          onClick={getObjectData}
           getTooltip={getTooltip}
         />
       </div>
