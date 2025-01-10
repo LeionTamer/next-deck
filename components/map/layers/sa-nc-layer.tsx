@@ -42,7 +42,7 @@ export class SANCLayer extends CompositeLayer<ISANCLayer> {
         getColorWeight: (d: NCDatasetValuesType) => d.value,
         getElevationWeight: (d: NCDatasetValuesType) =>
           d.value / this.props.datasetInfo.max - this.props.datasetInfo.min,
-        elevationScale: 50,
+        elevationScale: 30,
         radius: 3000,
         colorDomain: [this.props.datasetInfo.min, this.props.datasetInfo.max],
         colorRange: [
@@ -51,7 +51,7 @@ export class SANCLayer extends CompositeLayer<ISANCLayer> {
           [240, 59, 32, 95],
         ],
 
-        pickable: this.props.showLayers.includes('hex'),
+        // pickable: this.props.showLayers.includes('hex'),
         visible: this.props.showLayers.includes('hex'),
       }),
     ]
