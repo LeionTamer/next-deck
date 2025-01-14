@@ -38,13 +38,14 @@ export default function AUSearchComponent({
   const getTooltip = useCallback(({ object }: PickingInfo) => {
     return (
       object && {
-        html: `<div>${JSON.stringify(object, null, 2)}<div>`,
+        text: `${JSON.stringify(object, null, '\t')}`,
+        style: { 'background-color': '#F8F8F8', color: '505050' },
       }
     )
   }, [])
 
   const getObjectData = useCallback(({ object }: PickingInfo) => {
-    if (!!object) setText(JSON.stringify(object, null, 2))
+    if (!!object) setText(JSON.stringify(object, null, '  '))
   }, [])
 
   return (

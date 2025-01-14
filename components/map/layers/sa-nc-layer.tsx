@@ -37,19 +37,26 @@ export class SANCLayer extends CompositeLayer<ISANCLayer> {
         id: `nc-hex-map-${this.props.areaId}`,
         data: this.props.data as NCDatasetValuesType[],
 
-        extruded: this.props.showLayers.includes('elevation'),
         getPosition: (d: NCDatasetValuesType) => [d.lon, d.lat],
+        radius: 4000,
+        material: {
+          ambient: 1,
+          diffuse: 0.05,
+          specularColor: [0.3, 0.1, 0.2],
+        },
+        colorScaleType: 'quantize',
         getColorWeight: (d: NCDatasetValuesType) => d.value,
-        getElevationWeight: (d: NCDatasetValuesType) =>
-          d.value / this.props.datasetInfo.max - this.props.datasetInfo.min,
-        elevationScale: 30,
-        radius: 3000,
-        colorDomain: [this.props.datasetInfo.min, this.props.datasetInfo.max],
+        colorAggregation: 'MAX',
         colorRange: [
-          [49, 163, 84, 95],
-          [255, 237, 160, 60],
-          [240, 59, 32, 95],
+          [0, 255, 0, 95], // Green
+          [255, 165, 0, 98], // Orange
+          [255, 0, 0, 95], // Red
         ],
+        getElevationWeight: (d: NCDatasetValuesType) => d.value,
+        elevationAggregation: 'MAX',
+        elevationScale: 12,
+        extruded: this.props.showLayers.includes('elevation'),
+        elevationScaleType: 'linear',
 
         pickable: this.props.showLayers.includes('hex'),
         visible: this.props.showLayers.includes('hex'),

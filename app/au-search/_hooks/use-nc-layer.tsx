@@ -32,7 +32,7 @@ export default function useNCLayers({
         data: `/api/au-sa?areaId=${areaId}`,
         stroked: true,
         filled: false,
-        pickable: true,
+        pickable: false,
         getLineColor: [160, 160, 180, 200],
         getLineWidth: 300,
         getPointRadius: 4,
