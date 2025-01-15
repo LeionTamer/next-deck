@@ -1,4 +1,4 @@
-import { valueToRgba } from '@/app/helpers/colorHelpers'
+import { colorSpectral, getColorFromValue } from '@/app/helpers/colorHelpers'
 import { NCDatasetType, NCDatasetValuesType } from '@/db/au/nc-dataset'
 import { CompositeLayer, HexagonLayer, Layer, ScatterplotLayer } from 'deck.gl'
 import { VisibleLayersType } from '../deck-instance'
@@ -19,15 +19,26 @@ export class SANCLayer extends CompositeLayer<ISANCLayer> {
 
         getPosition: (d: NCDatasetValuesType) => [d.lon, d.lat],
         stroked: true,
-        getRadius: 200,
+        getRadius: 300,
         getFillColor: (f: NCDatasetValuesType) =>
-          valueToRgba(
+          getColorFromValue(
             f.value,
             this.props.datasetInfo.min,
-            this.props.datasetInfo.max
-          ),
-        getLineColor: [0, 0, 0],
-        getLineWidth: 10,
+            this.props.datasetInfo.max,
+            // 0,
+            // 365,
+            colorSpectral
+          ) as [number, number, number],
+        getLineColor: (f: NCDatasetValuesType) =>
+          getColorFromValue(
+            f.value,
+            this.props.datasetInfo.min,
+            this.props.datasetInfo.max,
+            // 0,
+            // 365,
+            colorSpectral
+          ) as [number, number, number],
+        getLineWidth: 100,
         radiusScale: 6,
 
         pickable: this.props.showLayers.includes('scatter-plot'),

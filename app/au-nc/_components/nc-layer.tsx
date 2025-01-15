@@ -1,15 +1,15 @@
 'use client'
 
-import { valueToRgba } from '@/app/helpers/colorHelpers'
+import { colorSpectral, getColorFromValue } from '@/app/helpers/colorHelpers'
 import BaseMap from '@/components/map/basemap'
 import { NCDatasetType, NCDatasetValuesType } from '@/db/au/nc-dataset'
-import { GridLayer, HeatmapLayer, PickingInfo, ScatterplotLayer } from 'deck.gl'
+import { PickingInfo, ScatterplotLayer } from 'deck.gl'
 import { useState } from 'react'
 
 export default function NCMap({
   data,
   range,
-  //   datasetInfo,
+  datasetInfo,
 }: {
   data: NCDatasetValuesType[]
   range: { min: number; max: number }
@@ -20,33 +20,6 @@ export default function NCMap({
     'scatterplot'
   )
 
-  const gridLayer = new GridLayer<NCDatasetValuesType>({
-    id: 'grid-layer',
-    visible: showLayer === 'grid',
-    data: data,
-    cellSize: 1500,
-    getPosition: (d: NCDatasetValuesType) => [d.lon, d.lat],
-    getColorWeight: (d: NCDatasetValuesType) => d.value,
-    getElevationWeight: (d: NCDatasetValuesType) => d.value,
-    colorDomain: [min, max],
-    elevationDomain: [min, max],
-    extruded: true,
-    elevationScale: 150,
-    pickable: true,
-  })
-
-  const heatmapLayer = new HeatmapLayer({
-    id: 'heatmap-layer',
-    visible: showLayer === 'heatmap',
-    data: data,
-    aggregation: 'MEAN',
-    getPosition: (d: NCDatasetValuesType) => [d.lon, d.lat],
-    getWeight: (d: NCDatasetValuesType) => d.value,
-    radiusPixels: 5,
-    pickable: true,
-    colorDomain: [min, max],
-  })
-
   const scatterPlotLayer = new ScatterplotLayer<NCDatasetValuesType>({
     id: 'scatter-plot-layer',
     visible: showLayer === 'scatterplot',
@@ -54,7 +27,12 @@ export default function NCMap({
     stroked: true,
     getPosition: (d: NCDatasetValuesType) => [d.lon, d.lat],
     getRadius: 300,
-    getFillColor: (d: NCDatasetValuesType) => valueToRgba(d.value, min, max),
+    getFillColor: (d: NCDatasetValuesType) =>
+      getColorFromValue(d.value, min, max, colorSpectral) as [
+        number,
+        number,
+        number,
+      ],
     getLineColor: [0, 0, 0],
     getLineWidth: 10,
     radiusScale: 6,
@@ -64,11 +42,21 @@ export default function NCMap({
   return (
     <BaseMap
       height="100vh"
-      layers={[gridLayer, heatmapLayer, scatterPlotLayer]}
+      layers={[scatterPlotLayer]}
       controller
       onClick={(info: PickingInfo<NCDatasetType>) => {
         console.table(info)
       }}
+      getTooltip={(obj) =>
+        obj &&
+        obj.object && {
+          text: `Value: ${obj.object.value} ${datasetInfo.units}`,
+          style: {
+            backgroundColor: '#F0F0F0',
+            borderRadius: '10px',
+          },
+        }
+      }
     />
   )
 }

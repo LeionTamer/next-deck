@@ -39,7 +39,11 @@ export default function AUSearchComponent({
     return (
       object && {
         text: `${JSON.stringify(object, null, '\t')}`,
-        style: { 'background-color': '#F8F8F8', color: '505050' },
+        style: {
+          'background-color': '#F8F8F8',
+          backgroundColor: '#F0F0F0',
+          borderRadius: '10px',
+        },
       }
     )
   }, [])
